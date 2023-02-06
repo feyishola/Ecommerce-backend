@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>add a product</h2>
+    <form id="form">
+        <input type="text" name="productName" placeholder="product name"/>
+        <input type="text" name="productQuantity" placeholder="product Quantity"/>
+        <input type="text" name="productCategory" placeholder="product Category"/>
+        <input type="text" name="productAvailability" placeholder="product Avalability"/>
+        <button type="submit">add product</button>
+    </form>
+    <div></div><br/><br/>
+    
+
+    <script>
+        const submit = (e)=>{
+            if(e) e.preventDefault()
+            let form = e.target
+            let reqBody = {}
+            let inputs = form.getElementsByTagName("input")
+
+            for(let i = 0; i < inputs.length; i++){
+                let elem = inputs[i]
+                reqBody[elem.getAttribute("name")] = elem.value
+            }
+
+            fetch("",{
+                method:"POST",
+                body: JSON.stringify(reqBody),
+                Headers:{"Content-Type":"application/json"}
+            })
+            .then(async(res)=>{
+                let result = await res.json()
+                if(result.response === "ok"){
+                    alert("product added to db")
+                }
+            })
+            .catch(err=>{
+                alert(err.message)
+            })
+
+            return false;
+
+
+        }
+        let form = document.getElementById("form")
+        if(form){
+            form.addEventListener("submit", submit)
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - $PWD/STORAGE/mongo:/data/db
+    networks:
+      - mynet
+
+  orderapp:
+    build: ./orders
+    restart: always
+    env_file:
+      - ./orders/src/.env
+    labels:
+      - traefik.frontend.rule=Host:orderapp.localhost
+      - traefik.enable=true
+      - traefik.docker.network=proxy_mynet
+    networks:
+      - mynet
+
+  productapp:
+    build: ./products
+    restart: always
+    env_file:
+      - ./products/src/.env
+    labels:
+      - traefik.frontend.rule=Host:productapp.localhost
+      - traefik.enable=true
+      - traefik.docker.network=proxy_mynet
+    networks:
+      - mynet
+
+  userapp:
+    build: ./users
+    restart: always
+    env_file:
+      - ./users/src/.env
+    labels:
+      - traefik.frontend.rule=Host:userapp.localhost
+      - traefik.enable=true
+      - traefik.docker.network=proxy_mynet  
+    networks:
+      - mynet
+
+  webapp:
+    build: ./www
+    restart: always
+    labels:
+      - traefik.frontend.rule=Host:localhost
+      - traefik.enable=true
+      - traefik.docker.network=proxy_mynet
+    volumes:
+      - $PWD/views/:/app/src/views
+    networks:
+      - mynet
+
+  traefikapp:
+    image: traefik:1.7.6-alpine
+    restart: always
+    command: --docker
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.frontend.rule=Host:dashboard.localhost
+      - traefik.enable=true
+      - traefik.port=8080
+      - traefik.docker.network=proxy_mynet
+    networks:
+      - mynet
+  
+
+networks:
+  mynet:
+  
