@@ -27,10 +27,10 @@ module.exports = ()=>{
     })
 
     api.post('/', [authentication, authorization(['admin'])], async (req,res)=>{
-        const {productName,productQuantity,productCategory,productAvailability,productAmount,productImage} = req.body
+        const {productName,productQuantity,productCategory,productAmount,productImage} = req.body
         try {
             console.log(req.body);
-            let response = await ProductDao.createProduct(productName,productQuantity,productCategory,productAvailability,productAmount,productImage)
+            let response = await ProductDao.createProduct(productName,productQuantity,productCategory,productAmount,productImage)
             res.status(200).json({response:"ok", payload:response})
         } catch (error) {
             res.status(500).json({response:"false", payload:error.message})
@@ -39,15 +39,15 @@ module.exports = ()=>{
 
     api.put('/:id', [authentication, authorization(['admin'])], async (req,res)=>{
         let id = req.params.id
-        const {productQuantity,productAvailability,productAmount} = req.body
-        if(productAvailability === !false){
+        const {productQuantity,productAmount} = req.body
+        
             try {
-                let response = await ProductDao.updateProduct(id,productQuantity,productAvailability,productAmount)
+                let response = await ProductDao.updateProduct(id,productQuantity,productAmount)
                 res.status(200).json({response:"ok", payload:response})
             } catch (error) {
                 res.status(500).json({response:"false", payload:error.message})
             }
-        }
+        
     })
 
     api.delete('/:id', [authentication, authorization(['admin'])], async (req,res)=>{

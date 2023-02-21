@@ -2,12 +2,11 @@ const ProductModel = require('../model/product.model')
 
 class ProductDao{
 
-    async createProduct(productName,productQuantity,productCategory,productAvalability,productAmount,productImage){
+    async createProduct(productName,productQuantity,productCategory,productAmount,productImage){
         let newProduct = new ProductModel({
             productName,
             productQuantity,
             productCategory,
-            productAvalability,
             productAmount,
             productImage
         })
@@ -26,8 +25,8 @@ class ProductDao{
         return result;
     }
 
-    async updateProduct(id,productQuantity,productAvalability,productAmount){
-        let result = await ProductModel.findByIdAndUpdate({_id:id}, {$set:{productQuantity,productAvalability,productAmount}})
+    async updateProduct(id,productQuantity,productAmount){
+        let result = await ProductModel.findByIdAndUpdate({_id:id}, {$set:{productQuantity,productAmount}})
         return result;
     }
 
