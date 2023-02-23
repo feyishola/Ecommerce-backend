@@ -17,7 +17,7 @@ services:
     env_file:
       - ./orders/src/.env
     labels:
-      - traefik.frontend.rule=Host:orderapp.localhost
+      - traefik.frontend.rule=PathPrefix:/api/v1/order
       - traefik.enable=true
       - traefik.docker.network=proxy_mynet
     networks:
@@ -29,7 +29,7 @@ services:
     env_file:
       - ./products/src/.env
     labels:
-      - traefik.frontend.rule=Host:productapp.localhost
+      - traefik.frontend.rule=PathPrefix:/api/v1/product
       - traefik.enable=true
       - traefik.docker.network=proxy_mynet
     networks:
@@ -41,7 +41,7 @@ services:
     env_file:
       - ./users/src/.env
     labels:
-      - traefik.frontend.rule=Host:userapp.localhost
+      - traefik.frontend.rule=PathPrefix:/api/v1/user
       - traefik.enable=true
       - traefik.docker.network=proxy_mynet  
     networks:
